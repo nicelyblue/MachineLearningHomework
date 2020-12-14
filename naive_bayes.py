@@ -10,7 +10,7 @@ def fit(x, y, classes):
     variances = np.zeros((n_classes, n_features), dtype=np.float64)
     priors = np.zeros(n_classes, dtype=np.float64)
 
-    # racunamo srednje vrednosti i varijanse feature-a za svaku klasu i apriorne verovatnoce svake klase
+    # Calculating means, variances and prior probabilities for each class
     for c in classes:
         x_c = x[y == c]
         means[c, :] = x_c.mean(axis=0)
@@ -26,7 +26,7 @@ def predict(X, classes, means, variances, priors):
 def predict_single(x, classes, means, variances, priors):
     posteriors = []
 
-    # racunamo verovatnoce da opservacija pripada svakoj od klasa, koristimo logaritam 'chain-rule' izraza
+    # Probabilites of opservation belonging to each class
     for c in classes:
         prior = np.log(priors[c])
         posterior = np.sum(np.log(pdf(c, x, means, variances)))
@@ -36,7 +36,7 @@ def predict_single(x, classes, means, variances, priors):
     return classes[np.argmax(posteriors)]
 
 def pdf(class_, x, means, variances):
-    # pomocna funkcija koja generise Gausovu raspodelu za ulaznu promenljivu 'x', nju koristimo kao
+    # Helper function to generate PDF
     mean = means[class_]
     var = variances[class_]
     numerator = np.exp(- (x - mean) ** 2 / (2 * var))
